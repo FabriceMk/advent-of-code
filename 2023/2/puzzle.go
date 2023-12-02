@@ -109,14 +109,13 @@ func part1(input string) int {
 
 		for gameRunesCurrentIndex < len(gameRunes) {
 			currentRune := gameRunes[gameRunesCurrentIndex]
-			currentRuneStr := string(currentRune)
 
-			if currentRuneStr == " " {
+			if currentRune == ' ' {
 				gameRunesCurrentIndex++
 				continue
 			}
 
-			if currentRuneStr == ";" {
+			if currentRune == ';' {
 				commitGameSet(&currentBallCounter, &currentBallColor, currentGameSet)
 
 				if !isValidGameSet(currentGameSet, bagContent) {
@@ -124,7 +123,7 @@ func part1(input string) int {
 					earlyBreak = true
 					break
 				}
-			} else if currentRuneStr == "," {
+			} else if currentRune == ',' {
 				commitGameSet(&currentBallCounter, &currentBallColor, currentGameSet)
 			} else if unicode.IsDigit(currentRune) {
 				currentDigit, _ := strconv.Atoi(string(currentRune))
