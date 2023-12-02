@@ -167,61 +167,72 @@ func commitGameSet(currentBallCounter *int, currentBallColor *strings.Builder, c
 func part2(input string) int {
 	var sum int
 
-	numberMapping := map[string]rune{
-		"one":   '1',
-		"two":   '2',
-		"three": '3',
-		"four":  '4',
-		"five":  '5',
-		"six":   '6',
-		"seven": '7',
-		"eight": '8',
-		"nine":  '9',
-	}
-
 	for _, item := range strings.Split(input, "\n") {
-		itemRunes := []rune(item)
+		if len(item) == 0 {
+			break
+		}
 
-		var firstDigit rune
-		var lastDigit rune
+		// Skip the 'Game {ID}:' substring as ID can be deducted
+		semicolonIndex := strings.Index(item, ":")
+		if semicolonIndex == -1 {
+			// A line is malformed so it is skipped (but it's not supposed to happen)
+			continue
+		}
 
-		var index = 0
+		gameRunes := []rune(item[semicolonIndex+1:])
 
-		for index < len(item) {
-			currentRune := itemRunes[index]
+		currentBallCounter := 0
+		var currentBallColor strings.Builder
+		minimalNeededBallsCount := map[string]int{
+			RED:   0,
+			GREEN: 0,
+			BLUE:  0,
+		}
 
-			if unicode.IsDigit(currentRune) {
-				if firstDigit == 0 {
-					firstDigit = currentRune
-				}
+		gameRunesCurrentIndex := 0
 
-				lastDigit = currentRune
+		for gameRunesCurrentIndex < len(gameRunes) {
+			currentRune := gameRunes[gameRunesCurrentIndex]
 
-				index++
+			if currentRune == ' ' {
+				gameRunesCurrentIndex++
 				continue
 			}
 
-			for digitLetter, digitValue := range numberMapping {
-				foundDigitLetterAt := strings.Index(item[index:], digitLetter)
+			if currentRune == ';' {
+				compareMinimalBallsCount(&currentBallCounter, &currentBallColor, minimalNeededBallsCount)
+			} else if currentRune == ',' {
+				compareMinimalBallsCount(&currentBallCounter, &currentBallColor, minimalNeededBallsCount)
+			} else if unicode.IsDigit(currentRune) {
+				currentDigit, _ := strconv.Atoi(string(currentRune))
 
-				if foundDigitLetterAt == 0 {
-					if firstDigit == 0 {
-						firstDigit = digitValue
-					}
+				if currentBallCounter <= 0 {
+					currentBallCounter = currentDigit
+				} else {
+					currentBallCounter = currentBallCounter*10 + currentDigit
+				}
+			} else {
+				currentBallColor.WriteRune(currentRune)
 
-					lastDigit = digitValue
-					break
+				if gameRunesCurrentIndex == len(gameRunes)-1 {
+					compareMinimalBallsCount(&currentBallCounter, &currentBallColor, minimalNeededBallsCount)
 				}
 			}
 
-			index++
+			gameRunesCurrentIndex++
 		}
 
-		number, err := strconv.Atoi(string(firstDigit) + string(lastDigit))
-		if err == nil {
-			sum += number
-		}
+		sum += minimalNeededBallsCount[RED] * minimalNeededBallsCount[GREEN] * minimalNeededBallsCount[BLUE]
 	}
 
 	return sum
+}
+
+func compareMinimalBallsCount(currentBallCounter *int, currentBallColor *strings.Builder, minimalNeededBallsCount map[string]int) {
+	if minimalNeededBallsCount[currentBallColor.String()] < *currentBallCounter {
+		minimalNeededBallsCount[currentBallColor.String()] = *currentBallCounter
+	}
+
+	*currentBallCounter = 0
+	currentBallColor.Reset()
 }
