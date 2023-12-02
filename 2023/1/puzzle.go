@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 	"unicode"
 )
 
@@ -43,6 +44,8 @@ func main() {
 
 	var res string
 
+	start := time.Now()
+
 	if part == 1 {
 		resPart1 := part1(input)
 		res = strconv.Itoa(resPart1)
@@ -52,6 +55,9 @@ func main() {
 		res = strconv.Itoa(resPart2)
 	}
 
+	timeElapsed := time.Since(start)
+
+	fmt.Println("Execution time: ", timeElapsed)
 	fmt.Println("Output:")
 	fmt.Println(res)
 }
