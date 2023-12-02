@@ -62,14 +62,14 @@ func main() {
 	fmt.Println(res)
 }
 
+const (
+	RED   = "red"
+	GREEN = "green"
+	BLUE  = "blue"
+)
+
 func part1(input string) int {
 	var sum int
-
-	const (
-		RED   = "red"
-		GREEN = "green"
-		BLUE  = "blue"
-	)
 
 	bagContent := map[string]int{
 		"red":   12,
@@ -105,6 +105,7 @@ func part1(input string) int {
 		}
 
 		gameRunesCurrentIndex := 0
+		earlyBreak := false
 
 		for gameRunesCurrentIndex < len(gameRunes) {
 			currentRune := gameRunes[gameRunesCurrentIndex]
@@ -116,21 +117,18 @@ func part1(input string) int {
 			}
 
 			if currentRuneStr == ";" {
-				currentGameSet[currentBallColor.String()] = currentBallCounter
-				currentBallCounter = 0
-				currentBallColor.Reset()
+				commitGameSet(&currentBallCounter, &currentBallColor, currentGameSet)
 
-				if currentGameSet[RED] > bagContent[RED] ||
-					currentGameSet[GREEN] > bagContent[GREEN] ||
-					currentGameSet[BLUE] > bagContent[BLUE] {
+				if !isValidGameSet(currentGameSet, bagContent) {
+					// if the current game set is invalid, we don't need to process the rest of this game
+					earlyBreak = true
 					break
 				}
 			} else if currentRuneStr == "," {
-				currentGameSet[currentBallColor.String()] = currentBallCounter
-				currentBallCounter = 0
-				currentBallColor.Reset()
+				commitGameSet(&currentBallCounter, &currentBallColor, currentGameSet)
 			} else if unicode.IsDigit(currentRune) {
 				currentDigit, _ := strconv.Atoi(string(currentRune))
+
 				if currentBallCounter <= 0 {
 					currentBallCounter = currentDigit
 				} else {
@@ -140,25 +138,31 @@ func part1(input string) int {
 				currentBallColor.WriteRune(currentRune)
 
 				if gameRunesCurrentIndex == len(gameRunes)-1 {
-					currentGameSet[currentBallColor.String()] = currentBallCounter
-					currentBallCounter = 0
-					currentBallColor.Reset()
+					commitGameSet(&currentBallCounter, &currentBallColor, currentGameSet)
 				}
 			}
 
 			gameRunesCurrentIndex++
 		}
 
-		if currentGameSet[RED] > bagContent[RED] ||
-			currentGameSet[GREEN] > bagContent[GREEN] ||
-			currentGameSet[BLUE] > bagContent[BLUE] {
-			continue
+		if !earlyBreak && isValidGameSet(currentGameSet, bagContent) {
+			sum += gameID
 		}
-
-		sum += gameID
 	}
 
 	return sum
+}
+
+func isValidGameSet(gameSet map[string]int, bagContent map[string]int) bool {
+	return gameSet[RED] <= bagContent[RED] &&
+		gameSet[GREEN] <= bagContent[GREEN] &&
+		gameSet[BLUE] <= bagContent[BLUE]
+}
+
+func commitGameSet(currentBallCounter *int, currentBallColor *strings.Builder, currentGameSet map[string]int) {
+	currentGameSet[currentBallColor.String()] = *currentBallCounter
+	*currentBallCounter = 0
+	currentBallColor.Reset()
 }
 
 func part2(input string) int {
