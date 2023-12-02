@@ -40,6 +40,8 @@ func main() {
 	var part int
 	flag.IntVar(&part, "part", 1, "part 1 or 2")
 	flag.Parse()
+
+	fmt.Println("##########")
 	fmt.Println("Running part", part)
 
 	var res string
@@ -60,6 +62,7 @@ func main() {
 	fmt.Println("Execution time: ", timeElapsed)
 	fmt.Println("Output:")
 	fmt.Println(res)
+	fmt.Println("##########")
 }
 
 func part1(input string) int {
