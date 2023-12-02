@@ -8,4 +8,4 @@ Each year has its dedicated folder.
 
 | Year | Language used |
 |----- | ------------- |
-| 2023 | [Golang](https://go.dev/) |
+| [2023](https://adventofcode.com/2023) | [Golang](https://go.dev/) |
