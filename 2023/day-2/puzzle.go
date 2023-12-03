@@ -130,12 +130,7 @@ func part1(input string) int {
 				commitGameSet(&currentBallCounter, &currentBallColor, currentGameSet)
 			} else if unicode.IsDigit(currentRune) {
 				currentDigit, _ := strconv.Atoi(string(currentRune))
-
-				if currentBallCounter <= 0 {
-					currentBallCounter = currentDigit
-				} else {
-					currentBallCounter = currentBallCounter*10 + currentDigit
-				}
+				currentBallCounter = currentBallCounter*10 + currentDigit
 			} else {
 				currentBallColor.WriteRune(currentRune)
 
