@@ -4,7 +4,7 @@ Repository for annual [Advent of Code](https://adventofcode.com) challenges.
 
 Each year has its dedicated folder.
 
-## Languages and rules used for each year
+## Languages used for each year
 
 | Year | Language used |
 |----- | ------------- |
