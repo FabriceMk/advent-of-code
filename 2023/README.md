@@ -48,3 +48,7 @@ make test/day-2      # Executes all the tests for Day 2
   - Try to go for a fast solution even if it has more hardcoded stuff
   - Go for a simple and elegant solution that puts emphasis on future collaboration and is easy-to-read
   - etc...
+
+## Notes
+
+I have taken the decision to separate `part1` and `part2` for each puzzle so I could have clear separation and have the possibility to have 2 different approaches for each part if needed. Maybe next year I will try to combine solutions.
