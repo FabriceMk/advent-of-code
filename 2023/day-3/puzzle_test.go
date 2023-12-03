@@ -11,13 +11,9 @@ func TestPuzzle_Part1(t *testing.T) {
 		input string
 		want  int
 	}{
-		// "part1 should return correct result for test input": {
-		// 	input: test_input,
-		// 	want:  4361,
-		// },
-		"part1 should return correct result for test input2": {
-			input: test_input2,
-			want:  27,
+		"part1 should return correct result for test input": {
+			input: test_input,
+			want:  4361,
 		},
 	}
 
@@ -41,7 +37,7 @@ func TestPuzzle_Part2(t *testing.T) {
 	}{
 		"part2 should return correct result for test input 2": {
 			input: test_input2,
-			want:  2286,
+			want:  467835,
 		},
 	}
 

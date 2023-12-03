@@ -154,5 +154,61 @@ func preparePaddedMatrix(inputLines *[]string, originalLineLength int) [][]rune 
 
 func part2(input string) int {
 	var sum int
+
+	// Approach: I didn't want dark magic but I couldn't resist to go with a small trick to not have to
+	// check bounds.
+	// The chosen algorithm is quite straightforward but probably not the most efficient.
+
+	inputLines := strings.Split(input, "\n")
+	if len(inputLines) == 0 {
+		panic("malformed input")
+	}
+
+	originalLineLength := len(inputLines[0])
+
+	// Prepare a padded matrix of runes that will contain the full schematics to help with the traversal.
+	schematics := preparePaddedMatrix(&inputLines, originalLineLength)
+	paddedLineLength := originalLineLength + 2
+
+	// Each '*' found with its attached numbers. Each gear is identified by its index on a
+	// virtual single dimension array representing the matrix.
+	possibleGearList := map[int][]int{}
+
+	for i := 0; i < len(inputLines)+2; i++ {
+		currentScannedNumber := 0
+
+		for j := 0; j < originalLineLength+2; j++ {
+			currentRune := schematics[i][j]
+
+			if unicode.IsDigit(currentRune) {
+				currentRuneValue, _ := strconv.Atoi(string(currentRune))
+				currentScannedNumber = currentScannedNumber*10 + currentRuneValue
+			} else {
+				if currentScannedNumber > 0 {
+					numberLength := len(strconv.Itoa(currentScannedNumber))
+
+					for verticalIndex := i - 1; verticalIndex <= i+1; verticalIndex++ {
+						for horizontalIndex := j - numberLength - 1; horizontalIndex <= j; horizontalIndex++ {
+							scannedCharacter := schematics[verticalIndex][horizontalIndex]
+							if scannedCharacter == '*' {
+								potentialGearIndex := verticalIndex*paddedLineLength + horizontalIndex
+								possibleGearList[potentialGearIndex] = append(possibleGearList[potentialGearIndex], currentScannedNumber)
+							}
+						}
+					}
+
+					currentScannedNumber = 0
+				}
+			}
+
+		}
+	}
+
+	for _, attachedNumbers := range possibleGearList {
+		if len(attachedNumbers) == 2 {
+			sum += attachedNumbers[0] * attachedNumbers[1]
+		}
+	}
+
 	return sum
 }
