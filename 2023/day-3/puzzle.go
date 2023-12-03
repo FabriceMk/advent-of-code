@@ -112,7 +112,6 @@ func part1(input string) int {
 					currentScannedNumber = 0
 				}
 			}
-
 		}
 	}
 
@@ -200,7 +199,6 @@ func part2(input string) int {
 					currentScannedNumber = 0
 				}
 			}
-
 		}
 	}
 
