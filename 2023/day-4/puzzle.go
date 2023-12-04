@@ -157,7 +157,7 @@ func calculateCardsCount(inputLines []string, startingIndex int, computedBranche
 	count := 0
 
 	for i := 0; i < wonCards; i++ {
-		count = count + calculateCardsCount(inputLines, startingIndex+i+1, computedBranches)
+		count += calculateCardsCount(inputLines, startingIndex+i+1, computedBranches)
 	}
 
 	if computedBranches[startingIndex] == 0 {
