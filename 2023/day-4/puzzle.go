@@ -18,52 +18,6 @@ var test_input string
 //go:embed input-test-2
 var test_input2 string
 
-func init() {
-	input = strings.TrimRight(input, "\n")
-	if len(input) == 0 {
-		panic("empty input file")
-	}
-
-	test_input = strings.TrimRight(test_input, "\n")
-	if len(test_input) == 0 {
-		panic("empty input-test file")
-	}
-
-	test_input2 = strings.TrimRight(test_input2, "\n")
-	if len(test_input2) == 0 {
-		panic("empty input-test-2 file")
-	}
-}
-
-func main() {
-	var part int
-	flag.IntVar(&part, "part", 1, "part 1 or 2")
-	flag.Parse()
-
-	fmt.Println("##########")
-	fmt.Println("Running part", part)
-
-	var res string
-
-	start := time.Now()
-
-	if part == 1 {
-		resPart1 := part1(input)
-		res = strconv.Itoa(resPart1)
-
-	} else {
-		resPart2 := part2(input)
-		res = strconv.Itoa(resPart2)
-	}
-
-	timeElapsed := time.Since(start)
-
-	fmt.Println("Execution time: ", timeElapsed)
-	fmt.Println("Output:")
-	fmt.Println(res)
-	fmt.Println("##########")
-}
-
 func part1(input string) int {
 	var sum int
 
@@ -165,4 +119,50 @@ func calculateCardsCount(inputLines []string, startingIndex int, computedBranche
 	}
 
 	return count + 1
+}
+
+func init() {
+	input = strings.TrimRight(input, "\n")
+	if len(input) == 0 {
+		panic("empty input file")
+	}
+
+	test_input = strings.TrimRight(test_input, "\n")
+	if len(test_input) == 0 {
+		panic("empty input-test file")
+	}
+
+	test_input2 = strings.TrimRight(test_input2, "\n")
+	if len(test_input2) == 0 {
+		panic("empty input-test-2 file")
+	}
+}
+
+func main() {
+	var part int
+	flag.IntVar(&part, "part", 1, "part 1 or 2")
+	flag.Parse()
+
+	fmt.Println("##########")
+	fmt.Println("Running part", part)
+
+	var res string
+
+	start := time.Now()
+
+	if part == 1 {
+		resPart1 := part1(input)
+		res = strconv.Itoa(resPart1)
+
+	} else {
+		resPart2 := part2(input)
+		res = strconv.Itoa(resPart2)
+	}
+
+	timeElapsed := time.Since(start)
+
+	fmt.Println("Execution time: ", timeElapsed)
+	fmt.Println("Output:")
+	fmt.Println(res)
+	fmt.Println("##########")
 }
