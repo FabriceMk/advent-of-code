@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-//go:embed input
+//go:embed input-full
 var input string
 
 //go:embed input-test
