@@ -30,7 +30,8 @@ These commands will clean any previous binary, build the required binary, execut
 To run tests you can just use `make test/day-{dayNumber}` to run all the tests for a specific day.
 
 Examples:
-```
+
+```sh
 make run/day-1/part2 # Executes Day 1 Part 2
 make run/day-2/part1 # Executes Day 2 Part 1
 make run/day-3       # Executes all parts of Day 3
