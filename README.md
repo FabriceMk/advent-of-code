@@ -1,4 +1,4 @@
-# advent-of-code
+# advent-of-code🎄🎁🎅❄️
 
 Repository for annual [Advent of Code](https://adventofcode.com) challenges.
 
