@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Security.AccessControl;
 
 // Extract argument to know which part to run
 var part = args.FirstOrDefault();
@@ -50,18 +49,10 @@ int Part1(string[] input)
 
     foreach (var line in input)
     {
-        string[] numbers = line.Split("   ");
+        var numbers = line.Split("   ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
 
-
-        if (int.TryParse(numbers[0], out int leftNumber))
-        {
-            leftList.Add(leftNumber);
-        }
-
-        if (int.TryParse(numbers[1], out int rightNumber))
-        {
-            rightList.Add(rightNumber);
-        }
+        leftList.Add(numbers[0]);
+        rightList.Add(numbers[1]);
     }
 
     leftList.Sort();
@@ -69,9 +60,8 @@ int Part1(string[] input)
 
     var result = 0;
 
-    for (var i = 0; i < leftList.Count; i++)
-    {
-        result += Math.Abs(rightList[i] - leftList[i]);
+    foreach (var tuple in leftList.Zip(rightList, (x,y) => (x,y))) {
+        result += Math.Abs(tuple.x - tuple.y);
     }
 
     return result;
@@ -84,36 +74,13 @@ int Part2(string[] input)
 
     foreach (var line in input)
     {
-        string[] numbers = line.Split("   ");
+        var numbers = line.Split("   ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
 
-
-        if (int.TryParse(numbers[0], out int leftNumber))
-        {
-            leftList.Add(leftNumber);
-        }
-
-        if (int.TryParse(numbers[1], out int rightNumber))
-        {
-            if (countingTable.ContainsKey(rightNumber))
-            {
-                countingTable[rightNumber]++;
-            }
-            else
-            {
-                countingTable[rightNumber] = 1;
-            }
-        }
+        leftList.Add(numbers[0]);
+        countingTable[numbers[1]] = countingTable.TryGetValue(numbers[1], out int occurrences) ? occurrences + 1 : 1;
     }
 
-    var result = 0;
-
-    foreach (var left in leftList)
-    {
-        if (countingTable.ContainsKey(left))
-        {
-            result += left * countingTable[left];
-        }
-    }
+    var result = leftList.Where(countingTable.ContainsKey).Aggregate(0, (a,b) => a + (countingTable.TryGetValue(b, out int occurrences) ? b * occurrences : 0));
 
     return result;
 }
