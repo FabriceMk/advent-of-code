@@ -58,11 +58,7 @@ int Part1(string[] input)
     leftList.Sort();
     rightList.Sort();
 
-    var result = 0;
-
-    foreach (var tuple in leftList.Zip(rightList, (x,y) => (x,y))) {
-        result += Math.Abs(tuple.x - tuple.y);
-    }
+    var result = leftList.Zip(rightList, (x, y) => Math.Abs(x - y)).Sum();
 
     return result;
 }
