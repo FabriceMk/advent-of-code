@@ -48,7 +48,7 @@ int Part1(string[] input)
 
     foreach (var line in input)
     {
-        string[] report = line.Split(" ");
+        var report = line.Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
 
         if (isReportSafe(report))
         {
@@ -59,16 +59,14 @@ int Part1(string[] input)
     return result;
 }
 
-bool isReportSafe(string[] report)
+bool isReportSafe(List<int> report)
 {
     var evolution = Evolution.None;
 
-    int.TryParse(report[0], out int previous);
+    var previous = report[0];
 
-    foreach (var numberString in report.Skip(1))
+    foreach (var currentNumber in report.Skip(1))
     {
-        int.TryParse(numberString, out int currentNumber);
-
         if (currentNumber == previous || (evolution == Evolution.Increase && currentNumber < previous) ||
         (evolution == Evolution.Decrease && currentNumber > previous))
         {
@@ -106,32 +104,31 @@ int Part2(string[] input)
 
     foreach (var line in input)
     {
-        string[] report = line.Split(" ");
+        var report = line.Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
 
         if (isReportSafe(report))
         {
             result++;
+            continue;
         }
-        else
+
+        var strippedSafeFound = false;
+
+        for (var i = 0; i < report.Count; i++)
         {
-            var strippedSafeFound = false;
+            var strippedReport = report.ToList();
+            strippedReport.RemoveAt(i);
 
-            for (var i = 0; i < report.Length; i++)
+            if (isReportSafe(strippedReport))
             {
-                var strippedReport = report.ToList();
-                strippedReport.RemoveAt(i);
-
-                if (isReportSafe([.. strippedReport]))
-                {
-                    strippedSafeFound = true;
-                    break;
-                }
+                strippedSafeFound = true;
+                break;
             }
+        }
 
-            if (strippedSafeFound)
-            {
-                result++;
-            }
+        if (strippedSafeFound)
+        {
+            result++;
         }
     }
 
