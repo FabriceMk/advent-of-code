@@ -37,8 +37,6 @@ int Part1(string[] input)
     return result;
 }
 
-
-
 int Part2(string[] input)
 {
     var result = 0;

@@ -41,7 +41,6 @@ int Part1(string[] input)
 bool isReportSafe(List<int> report)
 {
     var evolution = Evolution.None;
-
     var previous = report[0];
 
     foreach (var currentNumber in report.Skip(1))
@@ -54,14 +53,7 @@ bool isReportSafe(List<int> report)
 
         if (evolution == Evolution.None)
         {
-            if (currentNumber > previous)
-            {
-                evolution = Evolution.Increase;
-            }
-            else
-            {
-                evolution = Evolution.Decrease;
-            }
+            evolution = currentNumber > previous ? Evolution.Increase : Evolution.Decrease;
         }
 
         var gap = Math.Abs(currentNumber - previous);
@@ -95,10 +87,9 @@ int Part2(string[] input)
 
         for (var i = 0; i < report.Count; i++)
         {
-            var strippedReport = report.ToList();
-            strippedReport.RemoveAt(i);
+            report.RemoveAt(i);
 
-            if (isReportSafe(strippedReport))
+            if (isReportSafe(report))
             {
                 strippedSafeFound = true;
                 break;
@@ -120,4 +111,3 @@ enum Evolution
     Increase = 1,
     Decrease = -1,
 }
-
