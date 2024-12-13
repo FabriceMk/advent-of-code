@@ -110,8 +110,8 @@ int Part2(string[] input)
 
     var result = list.Where(x => !isValidUpdate(x, dict))
     .Select(x => {
-        x.Sort(comparer.Compare);
-        return x;
+        var ordered = x.OrderBy(x => x, comparer); // .Sort() is not guaranteed to be stable for equal elements so OrderBy is used
+        return ordered.ToList();
     })
     .Aggregate(0, (result, x) => result += x[x.Count / 2]);
 
