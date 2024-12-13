@@ -7,33 +7,12 @@ var part = args.FirstOrDefault();
 Console.WriteLine("##########");
 Console.WriteLine($"Running part {part}");
 
-string inputArg;
-var filename = "input-full";
-
-if (args.Length > 1)
-{
-    inputArg = args[1];
-    if (inputArg == "test")
-    {
-        filename = "input-test";
-    }
-}
-
+var filename = (args.Length > 1 && args[1] == "test") ? "input-test" : "input-full";
 string[] input = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename));
-
-
-int res;
 
 var watch = Stopwatch.StartNew();
 
-if (part == "2")
-{
-    res = Part2(input);
-}
-else
-{
-    res = Part1(input);
-}
+var res = (part == "1") ? Part1(input) : Part2(input);
 
 watch.Stop();
 
