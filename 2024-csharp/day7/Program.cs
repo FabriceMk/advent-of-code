@@ -29,11 +29,10 @@ long Part1(string[] input)
     {
         var splittedLine = line.Split(":").ToList();
 
-        long.TryParse(splittedLine[0], out var wantedRes);
+        _ = long.TryParse(splittedLine[0], out var wantedRes);
         var operands = splittedLine[1].Trim().Split(" ", StringSplitOptions.TrimEntries).Select(int.Parse).ToList();
 
         result = isValid(wantedRes, 0, operands, false) ? result + wantedRes : result;
-
     }
 
     return result;
@@ -63,11 +62,10 @@ long Part2(string[] input)
     {
         var splittedLine = line.Split(":").ToList();
 
-        long.TryParse(splittedLine[0], out var wantedRes);
+        _ = long.TryParse(splittedLine[0], out var wantedRes);
         var operands = splittedLine[1].Trim().Split(" ", StringSplitOptions.TrimEntries).Select(int.Parse).ToList();
 
         result = isValid(wantedRes, 0, operands, true) ? result + wantedRes : result;
-
     }
 
     return result;
