@@ -12,11 +12,11 @@
             ]
         },
         {
-            "name": "C#: day22",
+            "name": "C#: day9",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}\\2024-csharp\\day22\\day22.csproj",
-            "launchConfigurationId": "TargetFramework=;day22"
+            "projectPath": "${workspaceFolder}\\2024-csharp\\day9\\day9.csproj",
+            "launchConfigurationId": "TargetFramework=;day9"
         },
     ]
 }
