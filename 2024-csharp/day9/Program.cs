@@ -37,20 +37,26 @@ long Part1(string[] input)
     var detectedEnd = false;
     for (var i = diskSize - 1; i >= 0; i--)
     {
-        if (disk[i] == -1) { continue; }
+        if (disk[i] == -1)
+        {
+            continue;
+        }
 
         while (disk[currentBlockIndex] != -1)
         {
             currentBlockIndex++;
 
-            if (currentBlockIndex > diskSize || currentBlockIndex >= i)
+            if (currentBlockIndex >= i)
             {
                 detectedEnd = true;
                 break;
             }
         }
 
-        if (detectedEnd) { break; }
+        if (detectedEnd)
+        {
+            break;
+        }
 
         disk[currentBlockIndex] = disk[i];
         disk[i] = -1;
@@ -66,13 +72,13 @@ void ParseDiskRep(int[] diskRep, int[] inputDisk)
 {
     var acc = 0;
 
-    for(var blockIndex = 0; blockIndex < diskRep.Length; blockIndex++)
+    for (var blockIndex = 0; blockIndex < diskRep.Length; blockIndex++)
     {
         var number = diskRep[blockIndex];
 
         for (var blockScanIndex = 0; blockScanIndex < number; blockScanIndex++)
         {
-            inputDisk[acc+blockScanIndex] = blockIndex%2 == 0 ?  blockIndex/2 : -1;
+            inputDisk[acc + blockScanIndex] = blockIndex % 2 == 0 ? blockIndex / 2 : -1;
         }
 
         acc += number;
@@ -85,7 +91,10 @@ long Checksum(int[] inputDisk)
 
     for (var i = 0; i < inputDisk.Length; i++)
     {
-        if (inputDisk[i] == -1) { continue; }
+        if (inputDisk[i] == -1)
+        {
+            continue;
+        }
 
         result += inputDisk[i] * i;
     }
@@ -109,7 +118,10 @@ long Part2(string[] input)
     var detectedEnd = false;
     for (var i = diskSize - 1; i >= 0; i--)
     {
-        if (disk[i] == -1) { continue; }
+        if (disk[i] == -1)
+        {
+            continue;
+        }
 
         while (disk[currentBlockIndex] != -1)
         {
@@ -122,7 +134,10 @@ long Part2(string[] input)
             }
         }
 
-        if (detectedEnd) { break; }
+        if (detectedEnd)
+        {
+            break;
+        }
 
         disk[currentBlockIndex] = disk[i];
         disk[i] = -1;
