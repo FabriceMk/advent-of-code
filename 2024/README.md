@@ -1,11 +1,12 @@
-# 2024-csharp
+# 2024
 
 ## Language of the year
+
 [C#](https://dotnet.microsoft.com/en-us/languages/csharp)
 
 ## Prerequisites
 
-- **.NET 8**: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+- **.NET 8**: <https://dotnet.microsoft.com/en-us/download/dotnet/8.0>
 
 ## How to run
 
@@ -13,21 +14,22 @@ You need choose which part to run and if you want to run against the test input 
 
 By default the program runs against the full input file. By adding `test`, you can run it against the test input.
 
-
-```
+```sh
 dotnet run --project /day{dayNumber}/day{dayNumber}.csproj {1|2} {test}
 dotnet run --project /day4/day4.csproj 1   # Runs part 1 of the day 4 against input-full
 dotnet run --project /day6/day6.csproj 2 test  # Runs part 2 of the day 6 against input-test
 ```
 
 or directly from one of the day subfolders
-```
+
+```sh
 dotnet run {1|2} {test}
 dotnet run 1      # Runs part 1 of the day against the full input
 dotnet run 2 test # Runs part 2 of the day against the test input
 ```
 
 ## Self-imposed rules
+
 - No external dependency (except for the test files).
 - Use less regexp as possible, this aspect is not the one that interests me this year.
 - Try to avoid cryptic hacks when possible like bit flipping and other kind of Dark Magic.
