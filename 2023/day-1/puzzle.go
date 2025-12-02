@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"unicode"
 )
 
 //go:embed input-full
@@ -20,85 +19,191 @@ var test_input string
 var test_input2 string
 
 func part1(input string) int {
-	var sum int
-	for _, item := range strings.Split(input, "\n") {
-		var firstDigit rune
-		var lastDigit rune
+	sum := 0
 
-		for _, character := range item {
-			if unicode.IsDigit(character) {
-				if firstDigit == 0 {
-					firstDigit = character
-				}
+	inputLines := strings.Split(input, "\n")
 
-				lastDigit = character
+	emptyLines := map[int]bool{}
+	emptyColumns := map[int]bool{}
+	notEmptyColumns := map[int]bool{}
+
+	galaxyMap := map[int][]int{}
+
+	originalWidth := len(inputLines[0])
+	originalHeight := 0
+
+	galaxyNameGenerator := 0
+
+	for indexLine, line := range inputLines {
+		if line == "" {
+			continue
+		}
+
+		originalHeight++
+
+		foundGalaxyInLine := false
+		for indexColumn, scanned := range line {
+			if scanned == '#' {
+				foundGalaxyInLine = true
+				notEmptyColumns[indexColumn] = true
+				galaxyMap[galaxyNameGenerator] = []int{indexLine, indexColumn}
+				galaxyNameGenerator++
 			}
 		}
-
-		number, err := strconv.Atoi(string(firstDigit) + string(lastDigit))
-		if err == nil {
-			sum += number
+		if !foundGalaxyInLine {
+			emptyLines[indexLine] = true
 		}
 	}
+
+	for i := 0; i < originalWidth; i++ {
+		if !notEmptyColumns[i] {
+			emptyColumns[i] = true
+		}
+	}
+
+	scannedPairs := map[int]map[int]bool{}
+	galaxiesFounds := len(galaxyMap)
+
+	for nameGalaxy1, galaxy1 := range galaxyMap {
+		for nameGalaxy2, galaxy2 := range galaxyMap {
+			if nameGalaxy1 == nameGalaxy2 {
+				continue
+			}
+
+			smallerName := min(nameGalaxy1, nameGalaxy2)
+			biggerName := max(nameGalaxy1, nameGalaxy2)
+
+			if len(scannedPairs[smallerName]) >= galaxiesFounds-1 || scannedPairs[smallerName][biggerName] == true {
+				continue
+			}
+
+			smallerX := min(galaxy1[1], galaxy2[1])
+			biggerX := max(galaxy1[1], galaxy2[1])
+			distanceX := biggerX - smallerX
+
+			if distanceX > 1 {
+				for i := smallerX + 1; i < biggerX; i++ {
+					if emptyColumns[i] {
+						distanceX++
+					}
+				}
+			}
+
+			smallerY := min(galaxy1[0], galaxy2[0])
+			biggerY := max(galaxy1[0], galaxy2[0])
+			distanceY := biggerY - smallerY
+
+			if distanceY > 1 {
+				for i := smallerY + 1; i < biggerY; i++ {
+					if emptyLines[i] {
+						distanceY++
+					}
+				}
+			}
+
+			if scannedPairs[smallerName] == nil {
+				scannedPairs[smallerName] = map[int]bool{}
+			}
+			scannedPairs[smallerName][biggerName] = true
+
+			sum += distanceX + distanceY
+		}
+	}
+
 	return sum
 }
 
 func part2(input string) int {
-	var sum int
+	sum := 0
 
-	numberMapping := map[string]rune{
-		"one":   '1',
-		"two":   '2',
-		"three": '3',
-		"four":  '4',
-		"five":  '5',
-		"six":   '6',
-		"seven": '7',
-		"eight": '8',
-		"nine":  '9',
+	expansionFactor := 1000000
+
+	inputLines := strings.Split(input, "\n")
+
+	emptyLines := map[int]bool{}
+	emptyColumns := map[int]bool{}
+	notEmptyColumns := map[int]bool{}
+
+	galaxyMap := map[int][]int{}
+
+	originalWidth := len(inputLines[0])
+	originalHeight := 0
+
+	galaxyNameGenerator := 0
+
+	for indexLine, line := range inputLines {
+		if line == "" {
+			continue
+		}
+
+		originalHeight++
+
+		foundGalaxyInLine := false
+		for indexColumn, scanned := range line {
+			if scanned == '#' {
+				foundGalaxyInLine = true
+				notEmptyColumns[indexColumn] = true
+				galaxyMap[galaxyNameGenerator] = []int{indexLine, indexColumn}
+				galaxyNameGenerator++
+			}
+		}
+		if !foundGalaxyInLine {
+			emptyLines[indexLine] = true
+		}
 	}
 
-	for _, item := range strings.Split(input, "\n") {
-		itemRunes := []rune(item)
+	for i := 0; i < originalWidth; i++ {
+		if !notEmptyColumns[i] {
+			emptyColumns[i] = true
+		}
+	}
 
-		var firstDigit rune
-		var lastDigit rune
+	scannedPairs := map[int]map[int]bool{}
+	galaxiesFounds := len(galaxyMap)
 
-		var index = 0
-
-		for index < len(item) {
-			currentRune := itemRunes[index]
-
-			if unicode.IsDigit(currentRune) {
-				if firstDigit == 0 {
-					firstDigit = currentRune
-				}
-
-				lastDigit = currentRune
-
-				index++
+	for nameGalaxy1, galaxy1 := range galaxyMap {
+		for nameGalaxy2, galaxy2 := range galaxyMap {
+			if nameGalaxy1 == nameGalaxy2 {
 				continue
 			}
 
-			for digitLetter, digitValue := range numberMapping {
-				foundDigitLetterAt := strings.Index(item[index:], digitLetter)
+			smallerName := min(nameGalaxy1, nameGalaxy2)
+			biggerName := max(nameGalaxy1, nameGalaxy2)
 
-				if foundDigitLetterAt == 0 {
-					if firstDigit == 0 {
-						firstDigit = digitValue
+			if len(scannedPairs[smallerName]) >= galaxiesFounds-1 || scannedPairs[smallerName][biggerName] == true {
+				continue
+			}
+
+			smallerX := min(galaxy1[1], galaxy2[1])
+			biggerX := max(galaxy1[1], galaxy2[1])
+			distanceX := biggerX - smallerX
+
+			if distanceX > 1 {
+				for i := smallerX + 1; i < biggerX; i++ {
+					if emptyColumns[i] {
+						distanceX += expansionFactor - 1
 					}
-
-					lastDigit = digitValue
-					break
 				}
 			}
 
-			index++
-		}
+			smallerY := min(galaxy1[0], galaxy2[0])
+			biggerY := max(galaxy1[0], galaxy2[0])
+			distanceY := biggerY - smallerY
 
-		number, err := strconv.Atoi(string(firstDigit) + string(lastDigit))
-		if err == nil {
-			sum += number
+			if distanceY > 1 {
+				for i := smallerY + 1; i < biggerY; i++ {
+					if emptyLines[i] {
+						distanceY += expansionFactor - 1
+					}
+				}
+			}
+
+			if scannedPairs[smallerName] == nil {
+				scannedPairs[smallerName] = map[int]bool{}
+			}
+			scannedPairs[smallerName][biggerName] = true
+
+			sum += distanceX + distanceY
 		}
 	}
 
