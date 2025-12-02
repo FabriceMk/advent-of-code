@@ -58,21 +58,40 @@ func part2(input string) int {
 			strRepresentation := strconv.Itoa(i)
 			strRepresentationLength := len(strRepresentation)
 
+			invalidOdd := true
 			if strRepresentationLength%2 != 0 {
 				firstChar := strRepresentation[0]
 				for j := 1; j < strRepresentationLength; j++ {
 					if strRepresentation[j] != firstChar {
-						continue
+						invalidOdd = false
+						break
 					}
 				}
-				answer += i
+
+				if invalidOdd {
+					answer += i
+				}
+
+				continue
 			}
 
-			firstHalf := strRepresentation[0 : strRepresentationLength/2]
-			secondHalf := strRepresentation[strRepresentationLength/2:]
+			for j := 1; j <= strRepresentationLength/2; j++ {
+				pattern := strRepresentation[0:j]
+				patternLength := len(pattern)
 
-			if firstHalf == secondHalf {
-				answer += i
+				earlyBreak := false
+
+				for k := 1; k < strRepresentationLength/patternLength; k += patternLength {
+					subStr := strRepresentation[j : j+patternLength]
+					if subStr != pattern {
+						earlyBreak = true
+						break
+					}
+				}
+
+				if !earlyBreak {
+					answer += i
+				}
 			}
 		}
 	}
