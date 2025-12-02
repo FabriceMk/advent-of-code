@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"unicode"
 )
 
 //go:embed input-full
@@ -20,89 +19,71 @@ var test_input string
 var test_input2 string
 
 func part1(input string) int {
-	var sum int
-	for _, item := range strings.Split(input, "\n") {
-		var firstDigit rune
-		var lastDigit rune
+	answer := 0
 
-		for _, character := range item {
-			if unicode.IsDigit(character) {
-				if firstDigit == 0 {
-					firstDigit = character
-				}
+	position := 50
 
-				lastDigit = character
-			}
+	for _, row := range strings.Split(input, "\n") {
+		var rotationDigit = string(row[0])
+		var distanceDigit, _ = strconv.Atoi(string(row[1:]))
+
+		var remain = distanceDigit % 100
+
+		if rotationDigit == "L" {
+			position = (100 + (position - remain)) % 100
 		}
 
-		number, err := strconv.Atoi(string(firstDigit) + string(lastDigit))
-		if err == nil {
-			sum += number
+		if rotationDigit == "R" {
+			position = (position + distanceDigit) % 100
+		}
+
+		if position == 0 {
+			answer++
 		}
 	}
-	return sum
+
+	return answer
 }
 
 func part2(input string) int {
-	var sum int
+	answer := 0
 
-	numberMapping := map[string]rune{
-		"one":   '1',
-		"two":   '2',
-		"three": '3',
-		"four":  '4',
-		"five":  '5',
-		"six":   '6',
-		"seven": '7',
-		"eight": '8',
-		"nine":  '9',
-	}
+	position := 50
 
-	for _, item := range strings.Split(input, "\n") {
-		itemRunes := []rune(item)
+	for _, row := range strings.Split(input, "\n") {
+		var rotationDigit = string(row[0])
+		var distanceDigit, _ = strconv.Atoi(string(row[1:]))
 
-		var firstDigit rune
-		var lastDigit rune
+		fullCircles := distanceDigit / 100
 
-		var index = 0
+		clicksThroughZero := fullCircles
 
-		for index < len(item) {
-			currentRune := itemRunes[index]
+		var remain = distanceDigit % 100
 
-			if unicode.IsDigit(currentRune) {
-				if firstDigit == 0 {
-					firstDigit = currentRune
+		if rotationDigit == "L" {
+			if position-remain <= 0 {
+				if position != 0 {
+					clicksThroughZero++
 				}
 
-				lastDigit = currentRune
-
-				index++
-				continue
+				position = (100 + (position - remain)) % 100
+			} else {
+				position = (position - remain)
 			}
-
-			for digitLetter, digitValue := range numberMapping {
-				foundDigitLetterAt := strings.Index(item[index:], digitLetter)
-
-				if foundDigitLetterAt == 0 {
-					if firstDigit == 0 {
-						firstDigit = digitValue
-					}
-
-					lastDigit = digitValue
-					break
-				}
-			}
-
-			index++
 		}
 
-		number, err := strconv.Atoi(string(firstDigit) + string(lastDigit))
-		if err == nil {
-			sum += number
+		if rotationDigit == "R" {
+			if position+remain >= 100 {
+				clicksThroughZero++
+			}
+
+			position = (position + remain) % 100
 		}
+
+		answer += clicksThroughZero
 	}
 
-	return sum
+	return answer
 }
 
 func init() {

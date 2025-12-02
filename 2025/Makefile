@@ -6,7 +6,7 @@ build/day-%:
 	go build -o ./day-$*/puzzle ./day-$*/puzzle.go
 
 clean/day-%:
-	rm -f ./day-$*/puzzle
+	-rm -f ./day-$*/puzzle
 
 .PHONY: run/day-% run/day-%/part1 run/day-%/part2
 run/day-%: clean/day-% build/day-%
