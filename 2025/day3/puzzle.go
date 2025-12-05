@@ -21,26 +21,35 @@ var test_input2 string
 func part1(input string) int {
 	answer := 0
 
-	for _, idRangeStr := range strings.Split(input, ",") {
-		idRange := strings.Split(idRangeStr, "-")
-		rangeStart, _ := strconv.Atoi(idRange[0])
-		rangeEnd, _ := strconv.Atoi(idRange[1])
+	for _, bank := range strings.Split(input, "\n") {
+		highestJolt := 0
+		var firstBatteryHighest int
+		var secondBatteryHighest int
 
-		for i := rangeStart; i <= rangeEnd; i++ {
-			strRepresentation := strconv.Itoa(i)
-			strRepresentationLength := len(strRepresentation)
+		firstCurrent, _ := strconv.Atoi(bank[0:1])
+		secondCurrent, _ := strconv.Atoi(bank[1:2])
 
-			if strRepresentationLength%2 != 0 {
+		for _, currentBattery := range bank {
+			if firstCurrent == 0 {
+				firstCurrent = currentBattery
 				continue
 			}
 
-			firstHalf := strRepresentation[0 : strRepresentationLength/2]
-			secondHalf := strRepresentation[strRepresentationLength/2:]
+			if secondCurrent == 0 {
+				secondCurrent = currentBattery
+				continue
+			}
 
-			if firstHalf == secondHalf {
-				answer += i
+			currentJolt, _ := strconv.Atoi(fmt.Sprintf("%b", firstCurrent) + fmt.Sprintf("%b", secondCurrent))
+
+			if currentJolt > highestJolt {
+				highestJolt = currentJolt
+				firstBatteryHighest = firstCurrent
+				secondBatteryHighest = secondCurrent
 			}
 		}
+
+		answer += highestJolt
 	}
 
 	return answer
