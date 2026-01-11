@@ -24,28 +24,30 @@ func part1(input string) int {
 	for _, bank := range strings.Split(input, "\n") {
 		highestJolt := 0
 		var firstBatteryHighest int
-		var secondBatteryHighest int
 
-		firstCurrent, _ := strconv.Atoi(bank[0:1])
-		secondCurrent, _ := strconv.Atoi(bank[1:2])
+		var firstCurrent int
 
-		for _, currentBattery := range bank {
-			if firstCurrent == 0 {
-				firstCurrent = currentBattery
+		for firstBatteryIndex := 0; firstBatteryIndex < len(bank)-1; firstBatteryIndex++ {
+			currentFirstBattery := string(bank[firstBatteryIndex])
+
+			firstCurrent, _ = strconv.Atoi(currentFirstBattery)
+
+			if firstCurrent <= firstBatteryHighest {
 				continue
 			}
 
-			if secondCurrent == 0 {
-				secondCurrent = currentBattery
-				continue
-			}
+			firstBatteryHighest = firstCurrent
 
-			currentJolt, _ := strconv.Atoi(fmt.Sprintf("%b", firstCurrent) + fmt.Sprintf("%b", secondCurrent))
+			for secondBatteryIndex := firstBatteryIndex + 1; secondBatteryIndex < len(bank); secondBatteryIndex++ {
+				currentSecondBattery := string(bank[secondBatteryIndex])
 
-			if currentJolt > highestJolt {
-				highestJolt = currentJolt
-				firstBatteryHighest = firstCurrent
-				secondBatteryHighest = secondCurrent
+				secondCurrent, _ := strconv.Atoi(currentSecondBattery)
+
+				currentJolt := firstCurrent*10 + secondCurrent
+
+				if currentJolt > highestJolt {
+					highestJolt = currentJolt
+				}
 			}
 		}
 
@@ -58,42 +60,21 @@ func part1(input string) int {
 func part2(input string) int {
 	answer := 0
 
-	for _, idRangeStr := range strings.Split(input, ",") {
-		idRange := strings.Split(idRangeStr, "-")
-		rangeStart, _ := strconv.Atoi(idRange[0])
-		rangeEnd, _ := strconv.Atoi(idRange[1])
-
-		for currentSequence := rangeStart; currentSequence <= rangeEnd; currentSequence++ {
-			strRepresentation := strconv.Itoa(currentSequence)
-			strRepresentationLength := len(strRepresentation)
-
-			for j := 1; j <= strRepresentationLength/2; j++ {
-				pattern := strRepresentation[0:j]
-				patternLength := len(pattern)
-
-				if strRepresentationLength%patternLength != 0 {
-					continue
-				}
-
-				earlyBreak := false
-
-				for k := patternLength; k <= strRepresentationLength-patternLength; k += patternLength {
-					subStr := strRepresentation[k : k+patternLength]
-					if subStr != pattern {
-						earlyBreak = true
-						break
-					}
-				}
-
-				if !earlyBreak {
-					answer += currentSequence
-					break
-				}
-			}
-		}
+	for _, bank := range strings.Split(input, "\n") {
+		answer += checkHighest(bank, 12)
 	}
 
 	return answer
+}
+
+func checkHighest(input string, choicesNumber int) int {
+
+	if len(input) <= 2 {
+		result, _ := strconv.Atoi(input)
+		return result
+	}
+
+	return 0
 }
 
 func init() {

@@ -37,7 +37,7 @@ func TestPuzzle_Part2(t *testing.T) {
 	}{
 		"part2 should return correct result for test input 2": {
 			input: test_input2,
-			want:  4174379265,
+			want:  3121910778619,
 		},
 	}
 
